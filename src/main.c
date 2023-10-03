@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "oplist.h"
+
 const char* bfOpCodes = "<>,.+_[]";
 
 /*
@@ -69,7 +71,7 @@ char* stripCode(const char* code, size_t length) {
         return NULL;
     }
 
-    char* condensedCode = malloc(codeLen + 1);
+    char* condensedCode = calloc(codeLen + 1, 1);
 
     size_t condensedPos = 0;
     for (size_t i = 0; i < length; i++) {
@@ -109,7 +111,7 @@ int main(int argc, char *argv[]) {
     }
 
 
-    char* bfFileContents = malloc(bfFileLength + 1);
+    char* bfFileContents = calloc(bfFileLength + 1, 1);
 
     if (!fread(bfFileContents, 1, bfFileLength, bfFile)) {
         fprintf(stderr, "failed to read!\n");
@@ -122,9 +124,14 @@ int main(int argc, char *argv[]) {
     }
 
     char* condensedContents = stripCode(bfFileContents, bfFileLength);
+    size_t condensedContentsLength = strlen(condensedContents);
 
-    printf("condensed: \n%s\n", condensedContents);
+    OpBlock_t* ops = generate_ops_from_code(condensedContents, condensedContentsLength);
 
+    print_ops(stdout, ops);
+
+    free_ops(ops);
+    free(condensedContents);
     free(bfFileContents);
     fclose(bfFile);
 
