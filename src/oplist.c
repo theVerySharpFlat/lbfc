@@ -38,6 +38,7 @@ OpBlock_t* generate_ops_from_code(const char* code, size_t length) {
                 }
 
                 i = j - 1;
+
             } break;
 
             case '<':
@@ -105,11 +106,12 @@ OpBlock_t* generate_ops_from_code(const char* code, size_t length) {
 
                 current_block->block[currentOpIndex] = op;
                 currentOpIndex++;
+
             } break;
 
             case ']': {
                 Op_t op = {
-                    OP_JE,
+                    OP_JNE,
                     bracket_matcher_pop_bracket(bracket_matcher)
                 };
 
@@ -156,7 +158,7 @@ void print_ops(FILE* oFile, OpBlock_t* blockRoot) {
             case OP_ADD: fprintf(oFile, "OP_ADD (%ld)\n", op.n); break;
             case OP_DP: fprintf(oFile, "OP_DP (%ld)\n", op.n); break;
             case OP_LBL: fprintf(oFile, "OP_LBL (LBL_%ld)\n", op.n); break;
-            case OP_JE: fprintf(oFile, "OP_JE (to LBL_%ld)\n", op.n); break;
+            case OP_JNE: fprintf(oFile, "OP_JNE (to LBL_%ld)\n", op.n); break;
             case OP_IN: fprintf(oFile, "OP_IN\n"); break;
             case OP_OUT: fprintf(oFile, "OP_OUT\n"); break;
             default: fprintf(oFile, "Unkown OP (%ld)\n", op.n); break;

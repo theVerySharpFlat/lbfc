@@ -57,7 +57,6 @@ static void free_bracket_stack(Bracket_Matcher_Stack_t* stack) {
         free_bracket_stack(stack->p_next);
     }
 
-    printf("free default");
     fflush(stdout);
 }
 

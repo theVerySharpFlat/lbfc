@@ -14,7 +14,7 @@ typedef enum {
     OP_IN,
     OP_LBL,
     OP_DP,
-    OP_JE
+    OP_JNE
 } OP_TYPE;
 
 typedef struct {

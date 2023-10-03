@@ -5,20 +5,9 @@
 #include <string.h>
 
 #include "oplist.h"
+#include "platforms/nasm_x86_64_linux.h"
 
-const char* bfOpCodes = "<>,.+_[]";
-
-/*
- * Program start and mem allocation
- */
-const char* asmPrelude =
-#ifdef __linux
-    "global _start\n"
-    "\n"
-    "section .text\n"
-    "_start:\n"
-#endif
-;
+const char* bfOpCodes = "<>,.+-[]";
 
 /**
 * @return true if the code is valid
@@ -128,7 +117,10 @@ int main(int argc, char *argv[]) {
 
     OpBlock_t* ops = generate_ops_from_code(condensedContents, condensedContentsLength);
 
-    print_ops(stdout, ops);
+    // print_ops(stdout, ops);
+
+    FILE* assemblyFile = fopen("out.S", "w");
+    gen_nasm_x86_64_linux(ops, assemblyFile);
 
     free_ops(ops);
     free(condensedContents);
